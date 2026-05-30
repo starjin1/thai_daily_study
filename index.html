@@ -750,7 +750,12 @@
     const today = new Date();
     const start = new Date(today.getFullYear(), 0, 0);
     const dayNumber = Math.floor((today - start) / 86400000);
-    const lesson = lessons[dayNumber % lessons.length];
+    const thaiToKoreanLesson = lessons[dayNumber % lessons.length];
+    const koreanToThaiLesson = lessons[(dayNumber + Math.ceil(lessons.length / 2)) % lessons.length];
+    const lessonByKind = {
+      thaiToKorean: thaiToKoreanLesson,
+      koreanToThai: koreanToThaiLesson
+    };
     const stateKey = "thai-study-" + today.toISOString().slice(0, 10);
     const state = JSON.parse(localStorage.getItem(stateKey) || '{"tries":0,"correct":{}}');
 
@@ -797,6 +802,7 @@
 
     function checkAnswer(kind) {
       const isThaiToKorean = kind === "thaiToKorean";
+      const lesson = lessonByKind[kind];
       const input = $("#" + kind).value.trim();
       const feedback = $("#" + kind + "Feedback");
       const answers = isThaiToKorean ? lesson.koAnswers : lesson.thAnswers;
@@ -822,6 +828,7 @@
     }
 
     function showAnswer(kind) {
+      const lesson = lessonByKind[kind];
       const answers = kind === "thaiToKorean" ? lesson.koAnswers : lesson.thAnswers;
       const feedback = $("#" + kind + "Feedback");
       feedback.className = "feedback";
@@ -834,11 +841,16 @@
       day: "numeric",
       weekday: "long"
     });
-    $("#thaiPrompt").textContent = lesson.th;
-    $("#thaiRoman").textContent = lesson.roman;
-    $("#koreanPrompt").textContent = lesson.koPrompt;
-    $("#keyNote").textContent = lesson.note;
-    $("#vocabList").innerHTML = lesson.vocab.map((item) => "<span class=\"pill\">" + item + "</span>").join("");
+    $("#thaiPrompt").textContent = thaiToKoreanLesson.th;
+    $("#thaiRoman").textContent = thaiToKoreanLesson.roman;
+    $("#koreanPrompt").textContent = koreanToThaiLesson.koPrompt;
+    $("#keyNote").innerHTML = [
+      "<strong>태국어 → 한국어</strong> " + thaiToKoreanLesson.note,
+      "<strong>한국어 → 태국어</strong> " + koreanToThaiLesson.note
+    ].join("<br><br>");
+    $("#vocabList").innerHTML = [...thaiToKoreanLesson.vocab, ...koreanToThaiLesson.vocab]
+      .map((item) => "<span class=\"pill\">" + item + "</span>")
+      .join("");
 
     document.querySelectorAll("[data-check]").forEach((button) => {
       button.addEventListener("click", () => checkAnswer(button.dataset.check));
