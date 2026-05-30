@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>태국어 하루 번역 연습</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #233043;
+      --muted: #63758d;
+      --line: #cbdcf0;
+      --paper: #f7fbff;
+      --soft: #eaf4ff;
+      --accent: #4c8fd8;
+      --accent-strong: #246fb9;
+      --warn: #b16038;
+      --ok: #287a72;
+      --shadow: 0 18px 45px rgba(63, 104, 151, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(161, 210, 255, 0.42), rgba(219, 238, 255, 0.72)),
+        var(--paper);
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      padding: 8px 0 24px;
+      border-bottom: 1px solid rgba(99, 117, 141, 0.22);
+    }
+
+    .hero-copy {
+      min-width: 0;
+      flex: 1 1 620px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 54px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .date {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.76);
+      white-space: nowrap;
+    }
+
+    .hero-media {
+      display: grid;
+      justify-items: end;
+      gap: 10px;
+      flex: 0 0 min(34vw, 260px);
+    }
+
+    .hero-gif {
+      width: min(34vw, 260px);
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid rgba(203, 220, 240, 0.92);
+      border-radius: 8px;
+      box-shadow: 0 16px 36px rgba(58, 101, 148, 0.2);
+      background: #dceeff;
+    }
+
+    .summary {
+      margin: 18px 0 28px;
+      max-width: 760px;
+      color: #3d4652;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .practice {
+      display: grid;
+      gap: 16px;
+    }
+
+    .challenge {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .challenge-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--soft);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .direction {
+      color: var(--accent-strong);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .prompt {
+      margin: 0;
+      padding: 22px 16px 10px;
+      font-size: clamp(24px, 4vw, 38px);
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+
+    .romanization {
+      margin: 0;
+      padding: 0 16px 18px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .answer-area {
+      padding: 0 16px 16px;
+    }
+
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 92px;
+      resize: vertical;
+      border: 1px solid #bfc8d5;
+      border-radius: 8px;
+      padding: 12px 13px;
+      line-height: 1.5;
+      color: var(--ink);
+      background: white;
+    }
+
+    textarea:focus {
+      outline: 3px solid rgba(76, 143, 216, 0.22);
+      border-color: var(--accent);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 9px 13px;
+      cursor: pointer;
+      font-weight: 800;
+      color: white;
+      background: var(--accent);
+    }
+
+    .btn:hover {
+      background: var(--accent-strong);
+    }
+
+    .btn.secondary {
+      color: var(--ink);
+      background: white;
+      border-color: var(--line);
+    }
+
+    .btn.secondary:hover {
+      background: #f2f5f7;
+    }
+
+    .feedback {
+      min-height: 52px;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      line-height: 1.5;
+      background: #f7f9fb;
+      border: 1px solid var(--line);
+      color: #35404d;
+    }
+
+    .feedback.good {
+      border-color: rgba(24, 121, 78, 0.4);
+      background: rgba(24, 121, 78, 0.08);
+      color: var(--ok);
+      font-weight: 800;
+    }
+
+    .feedback.bad {
+      border-color: rgba(185, 76, 32, 0.38);
+      background: rgba(185, 76, 32, 0.08);
+      color: var(--warn);
+    }
+
+    aside {
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .panel p,
+    .panel li {
+      color: #475260;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .panel p {
+      margin: 0;
+    }
+
+    .panel ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      min-height: 78px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: white;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 25px;
+      line-height: 1.1;
+      color: var(--accent-strong);
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: white;
+      color: #485462;
+      font-size: 13px;
+    }
+
+    @media (max-width: 880px) {
+      header {
+        display: grid;
+        align-items: start;
+      }
+
+      .hero-media {
+        justify-items: start;
+        width: 100%;
+        flex-basis: auto;
+      }
+
+      .hero-gif {
+        width: min(100%, 260px);
+      }
+
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        width: min(100% - 22px, 1120px);
+        padding-top: 18px;
+      }
+
+      aside {
+        grid-template-columns: 1fr;
+      }
+
+      .challenge-head {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .direction {
+        white-space: normal;
+      }
+
+      .prompt {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="hero-copy">
+        <h1>태국어 하루 번역 연습</h1>
+        <p class="summary">매일 태국어 문장 하나는 한국어로, 한국어 문장 하나는 태국어로 바꿔 보세요. 답을 제출하면 문장 뜻, 어순, 핵심 표현을 기준으로 바로 확인합니다.</p>
+      </div>
+      <div class="hero-media" aria-label="학습 이미지">
+        <img class="hero-gif" src="assets/study-header.gif" alt="태국어 공부 분위기를 위한 움직이는 이미지">
+        <time class="date" id="todayLabel"></time>
+      </div>
+    </header>
+
+    <main>
+      <section class="practice" aria-label="오늘의 번역 문제">
+        <article class="challenge" data-card="0">
+          <div class="challenge-head">
+            <p class="label">문제 1</p>
+            <span class="direction">태국어 → 한국어</span>
+          </div>
+          <p class="prompt" id="thaiPrompt"></p>
+          <p class="romanization" id="thaiRoman"></p>
+          <div class="answer-area">
+            <textarea id="thaiToKorean" placeholder="한국어 번역을 입력하세요"></textarea>
+            <div class="actions">
+              <button class="btn" data-check="thaiToKorean">정답 확인</button>
+              <button class="btn secondary" data-show="thaiToKorean">정답 보기</button>
+            </div>
+            <div class="feedback" id="thaiToKoreanFeedback">아직 채점 전입니다.</div>
+          </div>
+        </article>
+
+        <article class="challenge" data-card="1">
+          <div class="challenge-head">
+            <p class="label">문제 2</p>
+            <span class="direction">한국어 → 태국어</span>
+          </div>
+          <p class="prompt" id="koreanPrompt"></p>
+          <p class="romanization">태국어 문장으로 입력하세요. 공백과 마침표는 없어도 됩니다.</p>
+          <div class="answer-area">
+            <textarea id="koreanToThai" placeholder="태국어 번역을 입력하세요"></textarea>
+            <div class="actions">
+              <button class="btn" data-check="koreanToThai">정답 확인</button>
+              <button class="btn secondary" data-show="koreanToThai">정답 보기</button>
+            </div>
+            <div class="feedback" id="koreanToThaiFeedback">아직 채점 전입니다.</div>
+          </div>
+        </article>
+      </section>
+
+      <aside aria-label="학습 정보">
+        <section class="panel">
+          <h2>오늘의 기록</h2>
+          <div class="stats">
+            <div class="stat">
+              <b id="correctCount">0</b>
+              <span>맞은 문제</span>
+            </div>
+            <div class="stat">
+              <b id="tryCount">0</b>
+              <span>제출 횟수</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>핵심 표현</h2>
+          <p id="keyNote"></p>
+          <div class="pill-row" id="vocabList"></div>
+        </section>
+
+        <section class="panel">
+          <h2>채점 기준</h2>
+          <ul>
+            <li>한국어 답은 의미가 맞으면 띄어쓰기와 조사 차이를 조금 봐줍니다.</li>
+            <li>태국어 답은 공백과 마침표 없이도 비교합니다.</li>
+            <li>틀리면 정답 문장과 다른 부분을 짧게 알려줍니다.</li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      {
+        th: "ถึงแม้ว่าฝนจะตก แต่เราก็ยังต้องไปทำงาน",
+        roman: "thueng-mae-wa fon ja tok, tae rao go yang tong pai tham-ngan",
+        koAnswers: ["비가 오더라도 우리는 여전히 일하러 가야 해요", "비가 와도 우리는 여전히 출근해야 해요", "비가 오더라도 우리는 그래도 일하러 가야 해요"],
+        koPrompt: "시간이 있으면 내일 다시 전화할게요.",
+        thAnswers: ["ถ้ามีเวลา พรุ่งนี้ฉันจะโทรกลับอีกครั้ง", "ถ้ามีเวลา พรุ่งนี้ผมจะโทรกลับอีกครั้ง", "ถ้ามีเวลา พรุ่งนี้จะโทรกลับอีกครั้ง"],
+        note: "ถึงแม้ว่า ... แต่ ... = 비록 ~하지만. ก็ยัง은 '그래도 여전히'라는 흐름을 만듭니다.",
+        vocab: ["ถึงแม้ว่า 비록", "ฝนตก 비가 오다", "ก็ยัง 그래도 여전히", "ต้อง 해야 한다", "โทรกลับ 다시 전화하다"]
+      },
+      {
+        th: "ถ้าคุณจองล่วงหน้า ราคาจะถูกกว่านี้",
+        roman: "tha khun jong luang-na, ra-kha ja thuk gwa ni",
+        koAnswers: ["미리 예약하면 가격이 이것보다 더 쌀 거예요", "미리 예약하면 가격이 더 저렴할 거예요", "미리 예약하면 이보다 가격이 더 쌀 거예요"],
+        koPrompt: "회의가 끝난 후에 같이 점심 먹으러 갑시다.",
+        thAnswers: ["หลังประชุมเสร็จ เราไปกินข้าวกลางวันด้วยกันเถอะ", "หลังจากประชุมเสร็จ เราไปกินข้าวกลางวันด้วยกันเถอะ", "หลังประชุมเสร็จ ไปกินข้าวกลางวันด้วยกันเถอะ"],
+        note: "ถ้า ... จะ ... = 만약 ~하면 ~할 것이다. กว่า는 비교급을 만들 때 씁니다.",
+        vocab: ["จอง 예약하다", "ล่วงหน้า 미리", "ราคา 가격", "ถูกกว่า 더 싸다", "ประชุม 회의"]
+      },
+      {
+        th: "ฉันเพิ่งรู้ว่าเขาย้ายไปอยู่เชียงใหม่แล้ว",
+        roman: "chan phoeng ru wa khao yai pai yu chiang-mai laew",
+        koAnswers: ["저는 그가 치앙마이로 이사 간 것을 방금 알았어요", "나는 그 사람이 치앙마이로 이사 갔다는 걸 이제 막 알았어요", "그가 치앙마이로 이사 갔다는 걸 방금 알았어요"],
+        koPrompt: "저는 태국어를 배운 지 거의 1년 됐어요.",
+        thAnswers: ["ฉันเรียนภาษาไทยมาเกือบหนึ่งปีแล้ว", "ผมเรียนภาษาไทยมาเกือบหนึ่งปีแล้ว", "ฉันเรียนภาษาไทยมาเกือบ 1 ปีแล้ว"],
+        note: "เพิ่ง + 동사 = 막 ~했다. 동사 + มา + 기간 + แล้ว는 '~해 온 지 ... 됐다'입니다.",
+        vocab: ["เพิ่ง 막", "รู้ว่า ~라는 것을 알다", "ย้าย 이사하다", "เกือบ 거의", "หนึ่งปี 1년"]
+      },
+      {
+        th: "เขาน่าจะมาถึงภายในครึ่งชั่วโมง",
+        roman: "khao na-ja ma thueng phai-nai khrueng chua-mong",
+        koAnswers: ["그는 아마 30분 안에 도착할 거예요", "그 사람은 아마 반 시간 안에 도착할 거예요", "그는 30분 이내에 도착할 것 같아요"],
+        koPrompt: "이 문제는 생각보다 복잡해요.",
+        thAnswers: ["ปัญหานี้ซับซ้อนกว่าที่คิด", "เรื่องนี้ซับซ้อนกว่าที่คิด", "ปัญหานี้ซับซ้อนกว่าที่ฉันคิด"],
+        note: "น่าจะ는 확신보다 약한 추측입니다. ภายใน은 '~이내에'라는 뜻입니다.",
+        vocab: ["น่าจะ 아마 ~일 것이다", "มาถึง 도착하다", "ภายใน ~이내에", "ครึ่งชั่วโมง 30분", "ซับซ้อน 복잡하다"]
+      },
+      {
+        th: "ระหว่างที่รอรถไฟ ฉันอ่านข่าวในโทรศัพท์",
+        roman: "ra-wang thi ro rot-fai, chan an khao nai tho-ra-sap",
+        koAnswers: ["기차를 기다리는 동안 저는 휴대폰으로 뉴스를 읽었어요", "전철을 기다리는 동안 나는 휴대폰으로 뉴스를 봤어요", "열차를 기다리는 동안 휴대폰으로 뉴스를 읽었어요"],
+        koPrompt: "제가 설명해도 괜찮을까요?",
+        thAnswers: ["ให้ฉันอธิบายได้ไหม", "ให้ผมอธิบายได้ไหม", "ฉันขออธิบายได้ไหม", "ผมขออธิบายได้ไหม"],
+        note: "ระหว่างที่ + 절 = ~하는 동안. ให้ + 사람 + 동사 ได้ไหม는 허락을 구할 때 자연스럽습니다.",
+        vocab: ["ระหว่างที่ ~하는 동안", "รอ 기다리다", "รถไฟ 기차", "ข่าว 뉴스", "อธิบาย 설명하다"]
+      },
+      {
+        th: "ยิ่งฝึกพูดบ่อยเท่าไร ก็ยิ่งมั่นใจมากขึ้นเท่านั้น",
+        roman: "ying fuek phut boi thao-rai, go ying man-jai mak khuen thao-nan",
+        koAnswers: ["말하기를 자주 연습할수록 자신감이 더 커져요", "자주 말하기 연습을 할수록 더 자신감이 생겨요", "말하기 연습을 많이 할수록 자신감이 더 높아져요"],
+        koPrompt: "저는 아직 태국어 발음에 익숙하지 않아요.",
+        thAnswers: ["ฉันยังไม่คุ้นกับการออกเสียงภาษาไทย", "ผมยังไม่คุ้นกับการออกเสียงภาษาไทย", "ฉันยังไม่คุ้นเคยกับการออกเสียงภาษาไทย"],
+        note: "ยิ่ง ... ก็ยิ่ง ... = ~할수록 더 ~하다. การ + 동사는 명사형을 만듭니다.",
+        vocab: ["ยิ่ง càng", "ฝึก 연습하다", "บ่อย 자주", "มั่นใจ 자신 있다", "ออกเสียง 발음하다"]
+      },
+      {
+        th: "ฉันไม่แน่ใจว่าประโยคนี้ใช้ถูกหรือเปล่า",
+        roman: "chan mai nae-jai wa pra-yok ni chai thuk rue-plao",
+        koAnswers: ["이 문장을 맞게 쓰는지 확실하지 않아요", "이 문장이 맞게 쓰였는지 잘 모르겠어요", "이 문장을 올바르게 사용하는지 확신이 없어요"],
+        koPrompt: "틀린 부분이 있으면 고쳐 주세요.",
+        thAnswers: ["ถ้ามีส่วนที่ผิด ช่วยแก้ให้หน่อย", "ถ้ามีตรงไหนผิด ช่วยแก้ให้หน่อย", "ถ้ามีส่วนที่ผิด กรุณาแก้ให้ด้วย"],
+        note: "ไม่แน่ใจว่า ... = ~인지 확실하지 않다. หรือเปล่า는 예/아니오 질문을 부드럽게 만듭니다.",
+        vocab: ["แน่ใจ 확신하다", "ประโยค 문장", "ใช้ 사용하다", "ถูก 맞다", "แก้ 고치다"]
+      },
+      {
+        th: "อาหารจานนี้เผ็ดกว่าที่ฉันคาดไว้",
+        roman: "a-han jan ni phet gwa thi chan khat wai",
+        koAnswers: ["이 음식은 제가 예상했던 것보다 더 매워요", "이 요리는 내가 예상한 것보다 더 매워요", "이 음식은 생각했던 것보다 더 맵네요"],
+        koPrompt: "조금 덜 맵게 만들어 주실 수 있나요?",
+        thAnswers: ["ช่วยทำให้เผ็ดน้อยลงหน่อยได้ไหม", "ช่วยทำให้เผ็ดน้อยลงได้ไหม", "ทำให้เผ็ดน้อยลงหน่อยได้ไหม"],
+        note: "กว่าที่ ... = ~했던 것보다. ช่วย ... หน่อยได้ไหม는 공손한 부탁입니다.",
+        vocab: ["จาน 접시/요리", "เผ็ด 맵다", "คาดไว้ 예상하다", "น้อยลง 덜", "ช่วย ~해 주세요"]
+      },
+      {
+        th: "เขาบอกว่าจะส่งเอกสารให้ภายในวันนี้",
+        roman: "khao bok wa ja song ek-ka-san hai phai-nai wan-ni",
+        koAnswers: ["그는 오늘 안에 서류를 보내 주겠다고 말했어요", "그 사람이 오늘 안에 문서를 보내 주겠다고 했어요", "그는 오늘 중으로 서류를 보내겠다고 했어요"],
+        koPrompt: "파일을 받으면 바로 확인하겠습니다.",
+        thAnswers: ["ถ้าได้รับไฟล์แล้ว ฉันจะตรวจสอบทันที", "ถ้าได้รับไฟล์แล้ว ผมจะตรวจสอบทันที", "เมื่อได้รับไฟล์แล้ว จะตรวจสอบทันที"],
+        note: "บอกว่า ... = ~라고 말하다. ให้는 누군가에게 해 주는 뉘앙스를 더합니다.",
+        vocab: ["ส่ง 보내다", "เอกสาร 서류", "ภายในวันนี้ 오늘 안에", "ได้รับ 받다", "ตรวจสอบ 확인하다"]
+      },
+      {
+        th: "ฉันเคยไปกรุงเทพฯ หลายครั้ง แต่ยังไม่เคยไปภูเก็ต",
+        roman: "chan khoei pai krung-thep lai khrang, tae yang mai khoei pai phu-ket",
+        koAnswers: ["저는 방콕에는 여러 번 가 봤지만 푸껫에는 아직 가 본 적이 없어요", "나는 방콕은 여러 번 가 봤지만 푸켓은 아직 안 가 봤어요", "방콕에는 여러 번 가 봤는데 푸껫에는 아직 가 본 적이 없어요"],
+        koPrompt: "태국에 가 본 적이 있나요?",
+        thAnswers: ["คุณเคยไปประเทศไทยไหม", "คุณเคยไปเมืองไทยไหม", "เคยไปประเทศไทยไหม"],
+        note: "เคย + 동사 = ~해 본 적이 있다. ยังไม่เคย는 아직 해 본 적이 없다는 뜻입니다.",
+        vocab: ["เคย ~해 본 적 있다", "หลายครั้ง 여러 번", "ยังไม่เคย 아직 해 본 적 없다", "ภูเก็ต 푸껫", "ประเทศไทย 태국"]
+      },
+      {
+        th: "ก่อนตัดสินใจ เราควรเปรียบเทียบข้อดีข้อเสียก่อน",
+        roman: "gon tat-sin-jai, rao khuan priap-thiap kho-di kho-sia gon",
+        koAnswers: ["결정하기 전에 우리는 장단점을 먼저 비교해야 해요", "결정 전에 장점과 단점을 먼저 비교하는 게 좋아요", "결정하기 전에는 장단점을 먼저 비교해야 합니다"],
+        koPrompt: "저는 이 방법이 더 효율적이라고 생각해요.",
+        thAnswers: ["ฉันคิดว่าวิธีนี้มีประสิทธิภาพมากกว่า", "ผมคิดว่าวิธีนี้มีประสิทธิภาพมากกว่า", "ฉันคิดว่าวิธีนี้ได้ผลดีกว่า"],
+        note: "ก่อน + 동사 = ~하기 전에. ควร는 '~하는 것이 좋다/해야 한다'의 권고 표현입니다.",
+        vocab: ["ตัดสินใจ 결정하다", "ควร ~해야 한다", "เปรียบเทียบ 비교하다", "ข้อดี 장점", "ข้อเสีย 단점"]
+      },
+      {
+        th: "ช่วงนี้ฉันไม่ค่อยมีเวลาทบทวนบทเรียน",
+        roman: "chuang-ni chan mai khoi mi wela thop-thuan bot-rian",
+        koAnswers: ["요즘 저는 수업 내용을 복습할 시간이 별로 없어요", "요즘은 배운 내용을 복습할 시간이 많지 않아요", "최근에는 복습할 시간이 별로 없어요"],
+        koPrompt: "오늘 배운 표현을 다시 한번 복습합시다.",
+        thAnswers: ["มาทบทวนสำนวนที่เรียนวันนี้อีกครั้งกันเถอะ", "มาทบทวนประโยคที่เรียนวันนี้อีกครั้งกันเถอะ", "เรามาทบทวนสำนวนที่เรียนวันนี้อีกครั้งกันเถอะ"],
+        note: "ไม่ค่อย + 동사/형용사 = 별로 ~하지 않다. ช่วงนี้는 요즘, 최근이라는 뜻입니다.",
+        vocab: ["ช่วงนี้ 요즘", "ไม่ค่อย 별로 ~않다", "ทบทวน 복습하다", "บทเรียน 수업 내용", "สำนวน 표현"]
+      },
+      {
+        th: "ถ้าออกจากบ้านตอนนี้ น่าจะทันรถเมล์รอบต่อไป",
+        roman: "tha ok jak ban ton-ni, na-ja than rot-me rop tor-pai",
+        koAnswers: ["지금 집에서 나가면 다음 버스를 탈 수 있을 것 같아요", "지금 출발하면 다음 버스를 제시간에 탈 것 같아요", "지금 집을 나서면 다음 버스 시간에 맞출 수 있을 것 같아요"],
+        koPrompt: "길이 막혀서 약속에 늦을 것 같아요.",
+        thAnswers: ["รถติด เลยน่าจะไปนัดสาย", "รถติด ฉันเลยน่าจะไปถึงนัดสาย", "รถติด ผมเลยน่าจะไปถึงนัดสาย"],
+        note: "ทัน은 시간에 맞추다, 늦지 않게 도착하다는 뜻입니다. เลย는 앞 상황의 결과를 연결합니다.",
+        vocab: ["ออกจากบ้าน 집에서 나가다", "น่าจะ ~할 것 같다", "ทัน 시간에 맞추다", "รถเมล์ 버스", "รถติด 길이 막히다"]
+      },
+      {
+        th: "ประโยคนี้ฟังดูเป็นธรรมชาติกว่าประโยคก่อนหน้า",
+        roman: "pra-yok ni fang du pen tham-ma-chat gwa pra-yok gon-na",
+        koAnswers: ["이 문장은 이전 문장보다 더 자연스럽게 들려요", "이 문장이 앞 문장보다 더 자연스럽게 들립니다", "이 문장은 전 문장보다 자연스러워요"],
+        koPrompt: "이 표현은 일상 대화에서 자주 쓰이나요?",
+        thAnswers: ["สำนวนนี้ใช้บ่อยในการสนทนาประจำวันไหม", "ประโยคนี้ใช้บ่อยในการสนทนาประจำวันไหม", "สำนวนนี้ใช้บ่อยในชีวิตประจำวันไหม"],
+        note: "ฟังดู + 형용사 = ~하게 들리다. เป็นธรรมชาติ는 자연스럽다는 뜻입니다.",
+        vocab: ["ฟังดู ~하게 들리다", "เป็นธรรมชาติ 자연스럽다", "ก่อนหน้า 이전의", "สนทนา 대화", "ประจำวัน 일상의"]
+      },
+      {
+        th: "ฉันกำลังพยายามจำคำศัพท์ใหม่ให้ได้มากที่สุด",
+        roman: "chan gam-lang pha-ya-yam jam kham-sap mai hai dai mak thi-sut",
+        koAnswers: ["저는 새로운 단어를 최대한 많이 외우려고 노력하고 있어요", "나는 새 단어를 가능한 한 많이 기억하려고 노력 중이에요", "새로운 어휘를 최대한 많이 외우려고 하고 있어요"],
+        koPrompt: "단어만 외우지 말고 예문도 같이 보세요.",
+        thAnswers: ["อย่าท่องแค่คำศัพท์ ให้ดูประโยคตัวอย่างด้วย", "อย่าจำแค่คำศัพท์ ให้ดูประโยคตัวอย่างด้วย", "ไม่ควรท่องแค่คำศัพท์ ควรดูประโยคตัวอย่างด้วย"],
+        note: "กำลัง + 동사 = ~하고 있는 중. ให้ได้มากที่สุด는 가능한 한 많이 해내겠다는 뜻입니다.",
+        vocab: ["พยายาม 노력하다", "จำ 기억하다", "คำศัพท์ 단어", "ให้ได้ ~해내다", "ประโยคตัวอย่าง 예문"]
+      },
+      {
+        th: "เมื่อคืนฉันนอนดึก เลยรู้สึกง่วงตลอดเช้า",
+        roman: "muea-khuen chan non duek, loei ru-suek nguang ta-lot chao",
+        koAnswers: ["어젯밤 늦게 자서 오전 내내 졸렸어요", "어젯밤에 늦게 잤기 때문에 아침 내내 졸렸어요", "어제 밤늦게 자서 오전 내내 졸린 느낌이었어요"],
+        koPrompt: "충분히 쉬지 않으면 집중하기 어려워요.",
+        thAnswers: ["ถ้าพักผ่อนไม่เพียงพอ จะมีสมาธิได้ยาก", "ถ้าพักผ่อนไม่พอ จะมีสมาธิได้ยาก", "ถ้าไม่ได้พักผ่อนเพียงพอ จะมีสมาธิยาก"],
+        note: "เลย는 원인 뒤에 결과를 이어 줍니다. ตลอดเช้า는 오전 내내입니다.",
+        vocab: ["เมื่อคืน 어젯밤", "นอนดึก 늦게 자다", "ง่วง 졸리다", "พักผ่อน 쉬다", "มีสมาธิ 집중하다"]
+      },
+      {
+        th: "ถ้าไม่เข้าใจตรงไหน ถามฉันได้ตลอด",
+        roman: "tha mai khao-jai trong-nai, tham chan dai ta-lot",
+        koAnswers: ["어느 부분이 이해되지 않으면 언제든 저에게 물어봐도 돼요", "이해가 안 되는 부분이 있으면 언제든 물어보세요", "어디가 이해 안 되면 언제든 나에게 질문해도 돼요"],
+        koPrompt: "제가 이해한 것이 맞는지 확인하고 싶어요.",
+        thAnswers: ["ฉันอยากตรวจสอบว่าสิ่งที่ฉันเข้าใจถูกไหม", "ผมอยากตรวจสอบว่าสิ่งที่ผมเข้าใจถูกไหม", "ฉันอยากเช็กว่าสิ่งที่ฉันเข้าใจถูกไหม"],
+        note: "ตรงไหน는 어느 부분이라는 뜻입니다. ได้ตลอด은 언제든 가능하다는 뜻입니다.",
+        vocab: ["เข้าใจ 이해하다", "ตรงไหน 어느 부분", "ถาม 묻다", "ตลอด 언제든/계속", "ตรวจสอบ 확인하다"]
+      },
+      {
+        th: "เขาพูดเร็วเกินไปจนฉันฟังไม่ทัน",
+        roman: "khao phut reo goen-pai jon chan fang mai than",
+        koAnswers: ["그가 너무 빨리 말해서 제가 알아듣지 못했어요", "그 사람이 너무 빨리 말해서 따라 듣지 못했어요", "그는 너무 빨리 말해서 내가 듣는 속도를 따라가지 못했어요"],
+        koPrompt: "조금 천천히 다시 말해 주실 수 있나요?",
+        thAnswers: ["ช่วยพูดซ้ำช้าลงหน่อยได้ไหม", "ช่วยพูดอีกครั้งช้าลงหน่อยได้ไหม", "กรุณาพูดซ้ำช้าลงหน่อยได้ไหม"],
+        note: "เกินไป = 너무 ~하다. ฟังไม่ทัน은 듣는 속도를 따라가지 못한다는 뜻입니다.",
+        vocab: ["เร็ว 빠르다", "เกินไป 너무", "จน 그래서 ~하다", "ฟังไม่ทัน 알아듣는 속도를 못 따라가다", "พูดซ้ำ 다시 말하다"]
+      },
+      {
+        th: "ประสบการณ์ครั้งนี้ทำให้ฉันเข้าใจวัฒนธรรมไทยมากขึ้น",
+        roman: "pra-sop-kan khrang ni tham-hai chan khao-jai wat-tha-na-tham thai mak khuen",
+        koAnswers: ["이번 경험은 제가 태국 문화를 더 이해하게 해 주었어요", "이번 경험 덕분에 태국 문화를 더 잘 이해하게 되었어요", "이 경험은 나에게 태국 문화를 더 이해하게 만들었어요"],
+        koPrompt: "문화 차이를 이해하는 것은 언어 공부에 중요해요.",
+        thAnswers: ["การเข้าใจความแตกต่างทางวัฒนธรรมสำคัญต่อการเรียนภาษา", "การเข้าใจความแตกต่างทางวัฒนธรรมสำคัญกับการเรียนภาษา", "ความเข้าใจเรื่องความแตกต่างทางวัฒนธรรมสำคัญต่อการเรียนภาษา"],
+        note: "ทำให้ + 사람 + 동사 = ~하게 만들다. มากขึ้น은 더 많아지다/더 ~해지다입니다.",
+        vocab: ["ประสบการณ์ 경험", "ทำให้ ~하게 하다", "วัฒนธรรม 문화", "มากขึ้น 더 ~해지다", "ความแตกต่าง 차이"]
+      },
+      {
+        th: "ฉันตั้งใจว่าจะฝึกเขียนภาษาไทยทุกวันอย่างน้อยสิบห้านาที",
+        roman: "chan tang-jai wa ja fuek khian pha-sa thai thuk-wan yang-noi sip-ha na-thi",
+        koAnswers: ["저는 매일 적어도 15분씩 태국어 쓰기를 연습하기로 마음먹었어요", "나는 매일 최소 15분 태국어 쓰기를 연습하려고 결심했어요", "매일 적어도 15분씩 태국어 작문을 연습할 생각이에요"],
+        koPrompt: "작은 목표를 꾸준히 지키는 것이 중요해요.",
+        thAnswers: ["การรักษาเป้าหมายเล็กๆ อย่างสม่ำเสมอเป็นสิ่งสำคัญ", "การทำตามเป้าหมายเล็กๆ อย่างสม่ำเสมอเป็นสิ่งสำคัญ", "การรักษาเป้าหมายเล็กๆ อย่างต่อเนื่องเป็นสิ่งสำคัญ"],
+        note: "ตั้งใจว่า ... = ~하기로 마음먹다. อย่างน้อย는 적어도, 최소한이라는 뜻입니다.",
+        vocab: ["ตั้งใจ 결심하다", "ฝึกเขียน 쓰기 연습하다", "อย่างน้อย 적어도", "เป้าหมาย 목표", "สม่ำเสมอ 꾸준히"]
+      },
+      {
+        th: "ถ้าแปลตรงตัวเกินไป ความหมายอาจฟังดูแปลก",
+        roman: "tha plae trong-tua goen-pai, khwam-mai at fang du plaek",
+        koAnswers: ["너무 직역하면 의미가 이상하게 들릴 수 있어요", "너무 문자 그대로 번역하면 뜻이 어색하게 들릴 수 있어요", "직역을 너무 하면 의미가 이상하게 들릴지도 몰라요"],
+        koPrompt: "이 문장은 직역보다 의역이 더 자연스러워요.",
+        thAnswers: ["ประโยคนี้แปลเอาความเป็นธรรมชาติกว่าแปลตรงตัว", "ประโยคนี้แปลแบบเอาความเป็นธรรมชาติกว่าแปลตรงตัว", "ประโยคนี้การแปลเอาความเป็นธรรมชาติกว่าการแปลตรงตัว"],
+        note: "แปลตรงตัว는 직역, แปลเอาความ은 뜻을 살려 번역하는 의역에 가깝습니다.",
+        vocab: ["แปล 번역하다", "ตรงตัว 직역의", "ความหมาย 의미", "อาจ ~일 수 있다", "แปลก 이상하다"]
+      },
+      {
+        th: "ฉันยังไม่ได้ตัดสินใจว่าจะเรียนต่อที่ไหน",
+        roman: "chan yang mai dai tat-sin-jai wa ja rian tor thi-nai",
+        koAnswers: ["저는 어디에서 계속 공부할지 아직 결정하지 않았어요", "나는 어디서 더 공부할지 아직 결정하지 못했어요", "어디에서 진학할지 아직 결정하지 않았어요"],
+        koPrompt: "결정하기 전에 정보를 더 찾아보고 싶어요.",
+        thAnswers: ["ก่อนตัดสินใจ ฉันอยากหาข้อมูลเพิ่มเติม", "ก่อนตัดสินใจ ผมอยากหาข้อมูลเพิ่มเติม", "ฉันอยากหาข้อมูลเพิ่มเติมก่อนตัดสินใจ"],
+        note: "ยังไม่ได้ + 동사 = 아직 ~하지 않았다. เรียนต่อ는 계속 공부하다/진학하다입니다.",
+        vocab: ["ยังไม่ได้ 아직 ~하지 않았다", "ตัดสินใจ 결정하다", "เรียนต่อ 계속 공부하다", "ข้อมูล 정보", "เพิ่มเติม 추가의"]
+      },
+      {
+        th: "คำว่า ใจเย็น ไม่ได้หมายถึงหัวใจที่เย็นจริงๆ",
+        roman: "kham wa jai-yen mai dai mai-thueng hua-jai thi yen jing-jing",
+        koAnswers: ["ใจเย็น이라는 말은 실제로 차가운 심장을 뜻하는 것이 아니에요", "ใจเย็น은 진짜로 심장이 차갑다는 뜻이 아니에요", "ใจเย็น이라는 표현은 실제 차가운 마음을 의미하지 않아요"],
+        koPrompt: "이 표현은 침착하라는 뜻이에요.",
+        thAnswers: ["สำนวนนี้หมายถึงให้ใจเย็น", "สำนวนนี้หมายถึงให้สงบใจ", "คำนี้หมายถึงให้ใจเย็น"],
+        note: "ไม่ได้หมายถึง ... = ~을 의미하는 것이 아니다. ใจเย็น은 침착하다/진정하다는 관용 표현입니다.",
+        vocab: ["คำว่า ~라는 단어", "หมายถึง 의미하다", "หัวใจ 심장/마음", "จริงๆ 실제로", "ใจเย็น 침착하다"]
+      },
+      {
+        th: "วันนี้งานยุ่งมากจนแทบไม่มีเวลาพัก",
+        roman: "wan-ni ngan yung mak jon thaep mai mi wela phak",
+        koAnswers: ["오늘 일이 너무 바빠서 쉴 시간이 거의 없었어요", "오늘 업무가 너무 바빠서 거의 쉴 시간이 없어요", "오늘은 일이 너무 많아서 쉴 시간이 거의 없었어요"],
+        koPrompt: "바쁘더라도 밥은 꼭 챙겨 드세요.",
+        thAnswers: ["ถึงจะยุ่ง ก็อย่าลืมกินข้าวนะ", "แม้จะยุ่ง ก็อย่าลืมกินข้าวนะ", "ถึงแม้จะยุ่ง ก็อย่าลืมกินข้าวนะ"],
+        note: "จน은 결과를 나타내며 '~해서 결국 ...하다'에 가깝습니다. แทบไม่มี는 거의 없다는 뜻입니다.",
+        vocab: ["งานยุ่ง 일이 바쁘다", "จน ~해서", "แทบ 거의", "เวลาพัก 쉴 시간", "อย่าลืม 잊지 마세요"]
+      },
+      {
+        th: "เขาขอให้ฉันช่วยตรวจประโยคภาษาไทยให้หน่อย",
+        roman: "khao kho hai chan chuai truat pra-yok pha-sa thai hai noi",
+        koAnswers: ["그는 저에게 태국어 문장을 좀 확인해 달라고 부탁했어요", "그 사람이 태국어 문장을 검토해 달라고 제게 부탁했어요", "그는 나에게 태국어 문장을 확인해 달라고 했어요"],
+        koPrompt: "제가 쓴 문장을 한번 봐 주실 수 있나요?",
+        thAnswers: ["ช่วยดูประโยคที่ฉันเขียนให้หน่อยได้ไหม", "ช่วยดูประโยคที่ผมเขียนให้หน่อยได้ไหม", "ช่วยตรวจประโยคที่ฉันเขียนให้หน่อยได้ไหม"],
+        note: "ขอให้ + 사람 + 동사 = ~에게 ~해 달라고 부탁하다. ตรวจ은 확인하다/검토하다입니다.",
+        vocab: ["ขอให้ 부탁하다", "ช่วย 돕다/~해 주다", "ตรวจ 확인하다", "ประโยค 문장", "เขียน 쓰다"]
+      },
+      {
+        th: "ถ้าใช้คำผิด ความรู้สึกของประโยคอาจเปลี่ยนไป",
+        roman: "tha chai kham phit, khwam-ru-suek khong pra-yok at plian pai",
+        koAnswers: ["단어를 잘못 쓰면 문장의 느낌이 바뀔 수 있어요", "말을 잘못 사용하면 문장의 뉘앙스가 달라질 수 있어요", "잘못된 단어를 쓰면 문장의 느낌이 변할 수 있어요"],
+        koPrompt: "비슷한 단어라도 뉘앙스가 다를 수 있어요.",
+        thAnswers: ["แม้เป็นคำที่คล้ายกัน แต่น้ำเสียงอาจต่างกันได้", "ถึงจะเป็นคำที่คล้ายกัน แต่น้ำเสียงอาจต่างกันได้", "คำที่คล้ายกันก็อาจมีน้ำเสียงต่างกันได้"],
+        note: "อาจ + 동사 = ~할 수 있다. น้ำเสียง은 말투, 어감, 뉘앙스를 말할 때 쓸 수 있습니다.",
+        vocab: ["ใช้คำ 단어를 쓰다", "ผิด 틀리다", "ความรู้สึก 느낌", "เปลี่ยนไป 바뀌다", "น้ำเสียง 어감"]
+      },
+      {
+        th: "ฉันอยากพูดให้คล่องขึ้น แต่ยังกลัวพูดผิด",
+        roman: "chan yak phut hai khlong khuen, tae yang klua phut phit",
+        koAnswers: ["저는 더 유창하게 말하고 싶지만 아직 틀리게 말할까 봐 두려워요", "나는 더 술술 말하고 싶은데 아직 말실수할까 봐 무서워요", "더 유창하게 말하고 싶지만 아직 틀리는 것이 두려워요"],
+        koPrompt: "틀리는 것을 두려워하지 말고 계속 연습하세요.",
+        thAnswers: ["อย่ากลัวที่จะพูดผิด ให้ฝึกต่อไป", "อย่ากลัวการพูดผิด ให้ฝึกต่อไป", "ไม่ต้องกลัวพูดผิด ให้ฝึกต่อไป"],
+        note: "ให้ + 형용사 + ขึ้น = 더 ~하게. กลัว + 동사 = ~하는 것을 두려워하다.",
+        vocab: ["คล่อง 유창하다", "ขึ้น 더 ~해지다", "กลัว 두려워하다", "พูดผิด 틀리게 말하다", "ต่อไป 계속"]
+      },
+      {
+        th: "หลังจากฟังหลายรอบ ฉันเริ่มจับใจความได้มากขึ้น",
+        roman: "lang-jak fang lai rop, chan roem jap jai-khwam dai mak khuen",
+        koAnswers: ["여러 번 듣고 나서 저는 핵심 내용을 더 잘 파악하기 시작했어요", "몇 번 듣고 나니 핵심을 더 많이 이해하기 시작했어요", "여러 차례 들은 후 중심 내용을 더 잘 잡게 되었어요"],
+        koPrompt: "처음에는 다 이해하지 못해도 괜찮아요.",
+        thAnswers: ["ตอนแรกยังไม่เข้าใจทั้งหมดก็ไม่เป็นไร", "ในตอนแรกถ้ายังไม่เข้าใจทั้งหมดก็ไม่เป็นไร", "ตอนแรกไม่เข้าใจทั้งหมดก็ไม่เป็นไร"],
+        note: "จับใจความได้ = 핵심 내용을 파악하다. เริ่ม + 동사는 '~하기 시작하다'입니다.",
+        vocab: ["หลายรอบ 여러 번", "เริ่ม 시작하다", "จับใจความ 핵심을 파악하다", "ทั้งหมด 전부", "ไม่เป็นไร 괜찮다"]
+      },
+      {
+        th: "ครูแนะนำให้ฉันอ่านออกเสียงทุกครั้งที่ฝึก",
+        roman: "khru nae-nam hai chan an ok-siang thuk khrang thi fuek",
+        koAnswers: ["선생님은 제가 연습할 때마다 소리 내어 읽으라고 조언했어요", "선생님은 연습할 때마다 음독하라고 추천했어요", "선생님께서 연습할 때마다 소리 내어 읽으라고 하셨어요"],
+        koPrompt: "소리 내어 읽으면 발음이 더 좋아질 거예요.",
+        thAnswers: ["ถ้าอ่านออกเสียง การออกเสียงจะดีขึ้น", "ถ้าอ่านออกเสียง จะออกเสียงได้ดีขึ้น", "การอ่านออกเสียงจะช่วยให้การออกเสียงดีขึ้น"],
+        note: "แนะนำให้ + 사람 + 동사 = ~에게 ~하라고 권하다. ทุกครั้งที่는 ~할 때마다입니다.",
+        vocab: ["แนะนำ 권하다", "อ่านออกเสียง 소리 내어 읽다", "ทุกครั้งที่ ~할 때마다", "การออกเสียง 발음", "ดีขึ้น 좋아지다"]
+      },
+      {
+        th: "ฉันสังเกตว่าภาษาไทยใช้คำลงท้ายเพื่อแสดงความสุภาพบ่อยมาก",
+        roman: "chan sang-ket wa pha-sa thai chai kham long-thai phuea sa-daeng khwam su-phap boi mak",
+        koAnswers: ["저는 태국어가 공손함을 나타내기 위해 문장 끝 표현을 자주 쓴다는 것을 알아차렸어요", "태국어는 예의를 표현하려고 끝맺음 말을 자주 쓴다는 걸 알게 되었어요", "나는 태국어에서 공손함을 보이기 위해 종결 표현을 많이 쓴다는 것을 관찰했어요"],
+        koPrompt: "상황에 맞게 공손한 표현을 쓰는 것이 좋아요.",
+        thAnswers: ["ควรใช้สำนวนสุภาพให้เหมาะกับสถานการณ์", "ควรใช้คำสุภาพให้เหมาะกับสถานการณ์", "การใช้สำนวนสุภาพให้เหมาะกับสถานการณ์เป็นเรื่องดี"],
+        note: "เพื่อ + 동사 = ~하기 위해. แสดงความสุภาพ는 공손함을 나타내다는 뜻입니다.",
+        vocab: ["สังเกต 알아차리다", "คำลงท้าย 종결 표현", "แสดง 나타내다", "ความสุภาพ 공손함", "สถานการณ์ 상황"]
+      },
+      {
+        th: "แม้ว่าประโยคนี้จะยาว แต่โครงสร้างไม่ซับซ้อนมาก",
+        roman: "mae-wa pra-yok ni ja yao, tae khrong-sang mai sap-son mak",
+        koAnswers: ["이 문장은 길지만 구조가 그리 복잡하지 않아요", "비록 이 문장이 길어도 구조는 많이 복잡하지 않아요", "문장이 길지만 구조는 아주 복잡하지 않습니다"],
+        koPrompt: "문장이 길 때는 먼저 주어와 동사를 찾으세요.",
+        thAnswers: ["เมื่อประโยคยาว ให้หาประธานและกริยาก่อน", "ถ้าประโยคยาว ให้หาประธานและกริยาก่อน", "เวลาประโยคยาว ให้หาประธานและกริยาก่อน"],
+        note: "แม้ว่า ... แต่ ... = 비록 ~하지만. โครงสร้าง는 구조, ซับซ้อน은 복잡하다는 뜻입니다.",
+        vocab: ["แม้ว่า 비록", "ยาว 길다", "โครงสร้าง 구조", "ซับซ้อน 복잡하다", "ประธาน 주어"]
+      },
+      {
+        th: "ฉันคงต้องใช้เวลามากกว่านี้กว่าจะพูดได้เป็นธรรมชาติ",
+        roman: "chan khong tong chai wela mak gwa ni gwa ja phut dai pen tham-ma-chat",
+        koAnswers: ["자연스럽게 말할 수 있게 되려면 아마 이보다 더 많은 시간이 필요할 거예요", "자연스럽게 말하려면 이보다 시간이 더 걸릴 것 같아요", "자연스럽게 말할 수 있기까지는 더 많은 시간이 필요할 듯해요"],
+        koPrompt: "꾸준히 연습하면 점점 자연스러워질 거예요.",
+        thAnswers: ["ถ้าฝึกอย่างสม่ำเสมอ จะค่อยๆ เป็นธรรมชาติมากขึ้น", "ถ้าฝึกอย่างต่อเนื่อง จะค่อยๆ เป็นธรรมชาติมากขึ้น", "ฝึกอย่างสม่ำเสมอแล้วจะค่อยๆ เป็นธรรมชาติมากขึ้น"],
+        note: "คงต้อง는 아마 ~해야 할 것 같다는 추측입니다. กว่าจะ는 ~하기까지라는 뜻입니다.",
+        vocab: ["คง 아마", "ใช้เวลา 시간이 걸리다", "กว่าจะ ~하기까지", "เป็นธรรมชาติ 자연스럽다", "ค่อยๆ 점점"]
+      }
+    ];
+
+    const today = new Date();
+    const start = new Date(today.getFullYear(), 0, 0);
+    const dayNumber = Math.floor((today - start) / 86400000);
+    const lesson = lessons[dayNumber % lessons.length];
+    const stateKey = "thai-study-" + today.toISOString().slice(0, 10);
+    const state = JSON.parse(localStorage.getItem(stateKey) || '{"tries":0,"correct":{}}');
+
+    const $ = (selector) => document.querySelector(selector);
+    const normalizeKorean = (value) => value
+      .replace(/[.!?~요니다습니다\s]/g, "")
+      .replace(/저는|나는|제가|내가/g, "나")
+      .replace(/을|를|은|는|이|가|에/g, "")
+      .trim();
+
+    const normalizeThai = (value) => value
+      .replace(/(ค่ะ|ครับ|คะ|ค้าบ|ฮะ)$/g, "")
+      .replace(/[ๆฯ.!?\s\u200B]/g, "")
+      .trim();
+
+    function similarity(a, b) {
+      if (!a || !b) return 0;
+      const longer = a.length >= b.length ? a : b;
+      const shorter = a.length < b.length ? a : b;
+      let hits = 0;
+      for (const char of shorter) {
+        if (longer.includes(char)) hits += 1;
+      }
+      return hits / Math.max(longer.length, 1);
+    }
+
+    function updateStats() {
+      $("#tryCount").textContent = state.tries;
+      $("#correctCount").textContent = Object.keys(state.correct).length;
+      localStorage.setItem(stateKey, JSON.stringify(state));
+    }
+
+    function bestMatch(input, answers, normalizer) {
+      const normalized = normalizer(input);
+      let best = { answer: answers[0], score: 0, exact: false };
+      for (const answer of answers) {
+        const target = normalizer(answer);
+        const exact = normalized === target;
+        const score = exact ? 1 : similarity(normalized, target);
+        if (score > best.score) best = { answer, score, exact };
+      }
+      return best;
+    }
+
+    function checkAnswer(kind) {
+      const isThaiToKorean = kind === "thaiToKorean";
+      const input = $("#" + kind).value.trim();
+      const feedback = $("#" + kind + "Feedback");
+      const answers = isThaiToKorean ? lesson.koAnswers : lesson.thAnswers;
+      const normalizer = isThaiToKorean ? normalizeKorean : normalizeThai;
+
+      if (!input) {
+        feedback.className = "feedback bad";
+        feedback.textContent = "답을 먼저 입력해 주세요.";
+        return;
+      }
+
+      state.tries += 1;
+      const match = bestMatch(input, answers, normalizer);
+      if (match.exact || match.score >= 0.88) {
+        state.correct[kind] = true;
+        feedback.className = "feedback good";
+        feedback.textContent = "맞았어요. 자연스러운 답: " + match.answer;
+      } else {
+        feedback.className = "feedback bad";
+        feedback.textContent = "아직 아니에요. 정답은 '" + answers[0] + "'입니다. 입력한 답은 핵심 의미나 어순이 조금 달라요. 오늘 표현: " + lesson.note;
+      }
+      updateStats();
+    }
+
+    function showAnswer(kind) {
+      const answers = kind === "thaiToKorean" ? lesson.koAnswers : lesson.thAnswers;
+      const feedback = $("#" + kind + "Feedback");
+      feedback.className = "feedback";
+      feedback.textContent = "가능한 정답: " + answers.join(" / ");
+    }
+
+    $("#todayLabel").textContent = today.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long"
+    });
+    $("#thaiPrompt").textContent = lesson.th;
+    $("#thaiRoman").textContent = lesson.roman;
+    $("#koreanPrompt").textContent = lesson.koPrompt;
+    $("#keyNote").textContent = lesson.note;
+    $("#vocabList").innerHTML = lesson.vocab.map((item) => "<span class=\"pill\">" + item + "</span>").join("");
+
+    document.querySelectorAll("[data-check]").forEach((button) => {
+      button.addEventListener("click", () => checkAnswer(button.dataset.check));
+    });
+    document.querySelectorAll("[data-show]").forEach((button) => {
+      button.addEventListener("click", () => showAnswer(button.dataset.show));
+    });
+
+    updateStats();
+  </script>
+</body>
+</html>
